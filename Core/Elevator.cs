@@ -137,11 +137,13 @@ public class Elevator : IElevator
         }
 
         floorsToTravel += Math.Abs(CurrentFloor - destinationFloor);
-        numberOfStops += queue.Count(floor => floor >= minFloor && floor <= maxFloor);
+        numberOfStops += queue.Count(floor => floor != destinationFloor && floor >= minFloor && floor <= maxFloor);
+        // don't calculate stop delay for destinationfloor, add the door opening time later instead
 
         return
             floorsToTravel * Constants.FLOOR_TRAVEL_TIME +
-            numberOfStops * Constants.ELEVATOR_DOOR_TIME;
+            numberOfStops * Constants.ELEVATOR_DOOR_TIME + 
+            Constants.ELEVATOR_DOOR_OPENING_TIME;
     }
 
     public Task StopAsync()

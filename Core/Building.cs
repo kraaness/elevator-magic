@@ -33,21 +33,20 @@ public class Building : IBuilding
 
     public async Task DispatchElevatorAsync(int floor)
     {
-        try
-        {
-            var closestElevator = elevators
+        var closestElevator = elevators
             .Where(w => !w.IsSuspended)
             .OrderBy(o => o.GetTimeToFloor(floor))
-            .First();
+            .FirstOrDefault();
 
-            logger?.LogInformation($"Elevator requested for floor {floor} - dispatching EL #{closestElevator.Id}");
-
-            await closestElevator.CallAsync(floor);
-        }
-        catch
+        if (closestElevator == null)
         {
             logger?.LogError("No elevators available.");
+            return;
         }
+
+        logger?.LogInformation($"Elevator requested for floor {floor} - dispatching EL #{closestElevator.Id}");
+
+        await closestElevator.CallAsync(floor);
     }
 
     public async Task EmergencyStopAsync()
