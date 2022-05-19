@@ -133,7 +133,7 @@ public class Elevator : IElevator
 
             numberOfStops += queue.Count;
 
-            queue = GetQueue(reverse: false);
+            queue = GetQueue(reverse: true);
         }
 
         floorsToTravel += Math.Abs(CurrentFloor - destinationFloor);
